@@ -14,7 +14,7 @@ public:
     double argumentRadians() const;
 
     void printPolarForm() const;
-
+    void complexMenu();
 
 
     ComplexNumber add(const ComplexNumber& a, const ComplexNumber& b);

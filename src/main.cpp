@@ -1,0 +1,65 @@
+#include <iostream>
+#include "ComplexTool.hpp"
+
+using namespace std;
+
+int main() {
+    int choice;
+
+    do {
+        cout << "\nAdvanced Math Methods C++ Toolkit\n";
+        cout << "1. Complex Number Tool\n";
+        cout << "2. Matrix Tool\n";
+        cout << "3. Root Approximation Tool\n";
+        cout << "4. Sequence and Series Tool\n";
+        cout << "5. Counting and Probability Tool\n";
+        cout << "6. Numerical Calculus Tool\n";
+        cout << "7. Export Session Report\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                ComplexNumber complexTool(0, 0); // Create a dummy complex number to access the menu
+                complexTool.complexMenu();
+                break;
+            }
+
+            case 2:
+                cout << "Matrix Tool coming soon.\n";
+                break;
+
+            case 3:
+                cout << "Root Approximation Tool coming soon.\n";
+                break;
+
+            case 4:
+                cout << "Sequence and Series Tool coming soon.\n";
+                break;
+
+            case 5:
+                cout << "Counting and Probability Tool coming soon.\n";
+                break;
+
+            case 6:
+                cout << "Numerical Calculus Tool coming soon.\n";
+                break;
+
+            case 7:
+                cout << "Export Session Report coming soon.\n";
+                break;
+
+            case 0:
+                cout << "Exiting program.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Please try again.\n";
+                break;
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
