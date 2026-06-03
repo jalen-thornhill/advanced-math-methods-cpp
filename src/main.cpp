@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ComplexTool.hpp"
+#include "MatrixTool.hpp"
 
 using namespace std;
 
@@ -27,7 +28,8 @@ int main() {
             }
 
             case 2:
-                cout << "Matrix Tool coming soon.\n";
+                MatrixTool matrixTool;
+                matrixTool.MatrixMenu();
                 break;
 
             case 3:
