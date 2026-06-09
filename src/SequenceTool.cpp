@@ -1,6 +1,4 @@
-#include "SequenceTool.hpp"\
-
-#include "SequenceTool.h"
+#include "SequenceTool.hpp"
 
 vector<double> SequenceTool::arithmeticSequence(double firstTerm, double difference, int terms) {
     vector<double> sequence;
@@ -43,4 +41,21 @@ double SequenceTool::sumSequence(const vector<double>& sequence) {
     }
 
     return total;
+}
+
+vector<double> SequenceTool::recurrenceSequence(double start, double multiplier, double constant, int terms) {
+    vector<double> sequence;
+
+    if (terms <= 0) {
+        return sequence;
+    }
+
+    double currentTerm = start;
+
+    for (int i = 0; i < terms; i++) {
+        sequence.push_back(currentTerm);
+        currentTerm = (multiplier * currentTerm) + constant;
+    }
+
+    return sequence;
 }
