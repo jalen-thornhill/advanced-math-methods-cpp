@@ -1,6 +1,8 @@
 #include <iostream>
 #include "ComplexTool.hpp"
 #include "MatrixTool.hpp"
+#include "RootTool.hpp"
+#include "SequenceTool.hpp"
 
 using namespace std;
 
@@ -33,11 +35,13 @@ int main() {
                 break;
 
             case 3:
-                cout << "Root Approximation Tool coming soon.\n";
-                break;
+                    RootTool rootTool;
+                    rootTool.rootMenu();
+                    break;
 
             case 4:
-                cout << "Sequence and Series Tool coming soon.\n";
+                SequenceTool sequenceTool;
+                sequenceTool.sequenceMenu();
                 break;
 
             case 5:
