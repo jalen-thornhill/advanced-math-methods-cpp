@@ -33,3 +33,14 @@ vector<double> SequenceTool::geometricSequence(double firstTerm, double ratio, i
 
     return sequence;
 }
+
+
+double SequenceTool::sumSequence(const vector<double>& sequence) {
+    double total = 0;
+
+    for (double value : sequence) {
+        total += value;
+    }
+
+    return total;
+}
