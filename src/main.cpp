@@ -3,11 +3,13 @@
 #include "MatrixTool.hpp"
 #include "RootTool.hpp"
 #include "SequenceTool.hpp"
+#include "ReportWriter.hpp"
 
 using namespace std;
 
 int main() {
     int choice;
+    string lastResult = "";
 
     do {
         cout << "\nAdvanced Math Methods C++ Toolkit\n";
@@ -53,7 +55,20 @@ int main() {
                 break;
 
             case 7:
-                cout << "Export Session Report coming soon.\n";
+                ReportWriter reportWriter;
+
+    if (lastResult == "") {
+        cout << "No result to export yet.\n";
+        break;
+    }
+
+    bool exported = reportWriter.exportReport("reports/session_report.txt", lastResult);
+
+    if (exported) {
+        cout << "Report exported to reports/session_report.txt\n";
+    } else {
+        cout << "Error exporting report. Make sure the reports folder exists.\n";
+    }
                 break;
 
             case 0:
