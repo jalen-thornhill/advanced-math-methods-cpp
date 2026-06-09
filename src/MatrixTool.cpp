@@ -126,3 +126,161 @@ Matrix MatrixTool::inverse2x2(const Matrix& matrix) {
 
     return inverse;
 }
+
+Matrix MatrixTool::rowEchelonForm(const Matrix& matrix) {
+    if (matrix.empty()) {
+        return Matrix{};
+    }
+
+    Matrix result = matrix;
+    int rows = result.size();
+    int cols = result[0].size();
+
+    int pivotRow = 0;
+
+    for (int col = 0; col < cols && pivotRow < rows; col++) {
+        int pivot = -1;
+
+        for (int row = pivotRow; row < rows; row++) {
+            if (result[row][col] != 0) {
+                pivot = row;
+                break;
+            }
+        }
+
+        if (pivot == -1) {
+            continue;
+        }
+
+        swap(result[pivotRow], result[pivot]);
+
+        double pivotValue = result[pivotRow][col];
+
+        for (int j = col; j < cols; j++) {
+            result[pivotRow][j] /= pivotValue;
+        }
+
+        for (int row = pivotRow + 1; row < rows; row++) {
+            double factor = result[row][col];
+
+            for (int j = col; j < cols; j++) {
+                result[row][j] -= factor * result[pivotRow][j];
+            }
+        }
+
+        pivotRow++;
+    }
+
+    return result;
+}
+
+Matrix MatrixTool::inputMatrix() {
+    int rows;
+    int cols;
+
+    cout << "Enter number of rows: ";
+    cin >> rows;
+
+    cout << "Enter number of columns: ";
+    cin >> cols;
+
+    Matrix matrix(rows, vector<double>(cols));
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cout << "Enter value [" << i << "][" << j << "]: ";
+            cin >> matrix[i][j];
+        }
+    }
+
+    return matrix;
+}
+
+
+void MatrixTool::MatrixMenu() {
+    int choice;
+
+    do {
+        cout << "\nMatrix Tool Menu\n\n";
+        cout << "1. Add Matrices\n";
+        cout << "2. Subtract Matrices\n";
+        cout << "3. Multiply Matrices\n";
+        cout << "4. Transpose Matrix\n";
+        cout << "5. Determinant of 2x2 Matrix\n";
+        cout << "6. Determinant of 3x3 Matrix\n";
+        cout << "7. Inverse of 2x2 Matrix\n";
+        cout << "8. Row Echelon Form\n";
+        cout << "0. Back to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        Matrix a;
+        Matrix b;
+        Matrix result;
+
+        switch (choice) {
+            case 1:
+                a = inputMatrix();
+                b = inputMatrix();
+                result = addMatrices(a, b);
+                printMatrix(result);
+                break;
+
+            case 2:
+                a = inputMatrix();
+                b = inputMatrix();
+                result = subtractMatrices(a, b);
+                printMatrix(result);
+                break;
+
+            case 3:
+                a = inputMatrix();
+                b = inputMatrix();
+                result = multiplyMatrices(a, b);
+                printMatrix(result);
+                break;
+
+            case 4:
+                a = inputMatrix();
+                result = transpose(a);
+                printMatrix(result);
+                break;
+
+            case 5:
+                a = inputMatrix();
+                cout << "Determinant: " << determinant2x2(a) << "\n";
+                break;
+
+            case 6:
+                a = inputMatrix();
+                cout << "Determinant: " << determinant3x3(a) << "\n";
+                break;
+
+            case 7:
+                a = inputMatrix();
+                result = inverse2x2(a);
+
+                if (result.empty()) {
+                    cout << "Matrix has no inverse.\n";
+                } else {
+                    printMatrix(result);
+                }
+                break;
+
+            case 8:
+                a = inputMatrix();
+                result = rowEchelonForm(a);
+                printMatrix(result);
+                break;
+
+            case 0:
+                cout << "Returning to Main Menu.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Please try again.\n";
+                break;
+        }
+
+    } while (choice != 0);
+}
