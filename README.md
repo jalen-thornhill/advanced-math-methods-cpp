@@ -1,8 +1,8 @@
 # Advanced Math Methods C++ Toolkit
 
-A C++ console application that demonstrates advanced mathematical methods through modular tools for complex numbers, matrices, root approximation, sequences, probability, numerical calculus, and report export.
+A C++ console application that demonstrates advanced mathematical methods through modular tools for complex numbers, matrices, root approximation, sequences, numerical calculus, and report export. Counting and probability remain planned features.
 
-This project was built as an employer-facing portfolio project to show C++ fundamentals, modular design, mathematical algorithms, input validation, and clean command-line interaction.
+This project was built as an employer-facing portfolio project to show C++ fundamentals, modular design, mathematical algorithms, basic input checks, and command-line interaction. Input validation is not yet comprehensive.
 
 ---
 
@@ -45,7 +45,7 @@ This project was built as an employer-facing portfolio project to show C++ funda
   * Partial sums
   * Recurrence sequences
 
-* Probability tools
+* Probability tools (planned, not implemented)
 
   * Factorials
   * Permutations
@@ -60,7 +60,9 @@ This project was built as an employer-facing portfolio project to show C++ funda
 
 * Report export
 
-  * Exports session results to `reports/session_report.txt`
+  * Exports the latest calculation's inputs and result to `reports/session_report.txt`
+  * Creates the `reports/` directory when needed and reports file-output errors
+  * Replaces an existing report; complete session history is not saved
 
 ---
 
@@ -75,7 +77,6 @@ This project was built as an employer-facing portfolio project to show C++ funda
 * Linear interpolation
 * Newton-Raphson method
 * Sequences and series
-* Counting and probability
 * Numerical differentiation
 * Numerical integration
 * Euler approximation
@@ -91,32 +92,27 @@ This project was built as an employer-facing portfolio project to show C++ funda
 advanced-math-methods-cpp/
   src/
     main.cpp
-    ComplexTool.h
+    ComplexTool.hpp
     ComplexTool.cpp
-    MatrixTool.h
+    MatrixTool.hpp
     MatrixTool.cpp
-    RootTool.h
+    RootTool.hpp
     RootTool.cpp
-    SequenceTool.h
+    SequenceTool.hpp
     SequenceTool.cpp
-    ProbabilityTool.h
-    ProbabilityTool.cpp
-    CalculusTool.h
+    CalculusTool.hpp
     CalculusTool.cpp
-    ReportWriter.h
+    ReportWriter.hpp
     ReportWriter.cpp
 
   docs/
-    REQUIREMENTS.md
     DESIGN.md
     TEST_PLAN.md
-    TEST_REPORT.md
+    TEST_PART.md
 
   reports/
     .gitkeep
-    session_report.txt
-
-  screenshots/
+    session_report.txt  (generated when exporting)
 
   README.md
   .gitignore
@@ -127,10 +123,24 @@ advanced-math-methods-cpp/
 
 ## Build Instructions
 
-From the project root, compile with:
+Requires a C++17 compiler. The Windows build has been verified with MSYS2 UCRT64 GCC 14.2.0.
+
+From the project root in PowerShell:
+
+```powershell
+$env:PATH = 'C:\msys64\ucrt64\bin;' + $env:PATH
+New-Item -ItemType Directory -Force -Path build | Out-Null
+$sourceFiles = @(Get-ChildItem -LiteralPath src -Filter '*.cpp' | ForEach-Object { $_.FullName })
+g++ -std=c++17 -Wall -Wextra -Wpedantic @sourceFiles -o build/math_toolkit.exe
+```
+
+Adjust the compiler path for your installation. Continue only if compilation succeeds. Two signed/unsigned comparison warnings remain in `SequenceTool.cpp`.
+
+For Linux/macOS, the equivalent build commands are below; those platforms have not been verified in this refresh:
 
 ```bash
-g++ src/main.cpp src/ComplexTool.cpp src/MatrixTool.cpp src/RootTool.cpp src/SequenceTool.cpp src/ProbabilityTool.cpp src/CalculusTool.cpp src/ReportWriter.cpp -o math_toolkit.exe
+mkdir -p build
+g++ -std=c++17 -Wall -Wextra -Wpedantic src/*.cpp -o build/math_toolkit
 ```
 
 ---
@@ -139,15 +149,23 @@ g++ src/main.cpp src/ComplexTool.cpp src/MatrixTool.cpp src/RootTool.cpp src/Seq
 
 On Windows:
 
-```bash
-.\math_toolkit.exe
+```powershell
+Push-Location build
+try {
+    .\math_toolkit.exe
+} finally {
+    Pop-Location
+}
 ```
 
 On Linux/macOS:
 
 ```bash
+cd build
 ./math_toolkit
 ```
+
+Running from `build/` keeps generated reports under `build/reports/`, which is ignored by Git. Reports are always written relative to the program's current working directory.
 
 ---
 
@@ -162,11 +180,13 @@ Advanced Math Methods C++ Toolkit
 2. Matrix Tool
 3. Root Approximation Tool
 4. Sequence and Series Tool
-5. Counting and Probability Tool
+5. Counting and Probability Tool (coming soon)
 6. Numerical Calculus Tool
-7. Export Session Report
+7. Export Latest Result
 0. Exit
 ```
+
+After completing a calculation, return to the main menu and select `7` to export it. Entering an unused menu or choosing probability does not replace the saved result. Exporting before a calculation displays “No result to export yet.”
 
 Example complex number operation:
 
@@ -202,32 +222,26 @@ A * B = [[19, 22], [43, 50]]
 
 ## Testing
 
-Testing documentation is included in:
-
-```text
-docs/TEST_PLAN.md
-docs/TEST_REPORT.md
-```
+Testing documentation is included in the [test plan](docs/TEST_PLAN.md) and [test report](docs/TEST_PART.md).
 
 The project was tested for:
 
 * Complex arithmetic
 * Complex modulus and argument
 * Matrix multiplication
-* 2x2 inverse
-* Row echelon form
 * Linear interpolation
 * Newton-Raphson approximation
 * Sequence partial sums
-* Combination calculation
 * Trapezium rule integration
 * Report export
+
+The verification run passed 21 direct-method checks and 11 console scenarios. This is selected coverage, not an exhaustive regression suite. The 2x2 determinant, inverse, and row-echelon test cases are still marked as not run; combinations are blocked because probability is unimplemented.
 
 ---
 
 ## Screenshots
 
-Runtime screenshots can be added to the `screenshots/` folder to show:
+A `screenshots/` folder can be created later to show:
 
 * Main menu
 * Complex number tool
@@ -240,8 +254,11 @@ Runtime screenshots can be added to the `screenshots/` folder to show:
 
 ## Future Work
 
+* Implement the counting and probability tool
+* Resolve the remaining compiler warnings
 * Add unit tests with a C++ testing framework
-* Add stronger input validation for all menu options
+* Add stronger input validation for all menu options, including recovery from nonnumeric input
+* Validate rectangular matrix data and handle matrix-operation errors in the menus
 * Add support for larger matrix operations
 * Add reduced row echelon form
 * Add graph output for function approximation results
@@ -252,4 +269,6 @@ Runtime screenshots can be added to the `screenshots/` folder to show:
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Jalen Thornhill.

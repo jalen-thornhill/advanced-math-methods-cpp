@@ -1,10 +1,12 @@
 #include <iostream>
+#include <sstream>
 #include "MatrixTool.hpp"
 #include <iomanip>
 
 using namespace std;
 
 void MatrixTool::printMatrix(const Matrix& matrix) {
+    // I am displaying each row with spaced columns to make the matrix readable.
     for (const auto& row : matrix) {
         for (const auto& value : row) {
             cout << setw(10) << value << " ";
@@ -14,14 +16,17 @@ void MatrixTool::printMatrix(const Matrix& matrix) {
 }
 
 bool MatrixTool::sameDimensions(const Matrix& a, const Matrix& b) {
+    // I am comparing row counts and first-row widths, assuming that each matrix is rectangular.
     return (a.size() == b.size()) && (a.empty() || a[0].size() == b[0].size());
 }
 
 bool MatrixTool::canMultiply(const Matrix& a, const Matrix& b) {
+    // I am checking for nonempty matrices and matching inner dimensions before multiplication.
     return !a.empty() && !b.empty() && a[0].size() == b.size();
 }
 
 Matrix MatrixTool::addMatrices(const Matrix& a, const Matrix& b) {
+    // I am rejecting mismatched dimensions before adding corresponding elements in a copy of the first matrix.
     if (!sameDimensions(a, b)) {
         throw invalid_argument("Matrices must have the same dimensions for addition.");
     }
@@ -35,6 +40,7 @@ Matrix MatrixTool::addMatrices(const Matrix& a, const Matrix& b) {
 }
 
 Matrix MatrixTool::subtractMatrices(const Matrix& a, const Matrix& b) {
+    // I am rejecting mismatched dimensions before subtracting corresponding elements in a copy of the first matrix.
     if (!sameDimensions(a, b)) {
         throw invalid_argument("Matrices must have the same dimensions for subtraction.");
     }
@@ -49,10 +55,12 @@ Matrix MatrixTool::subtractMatrices(const Matrix& a, const Matrix& b) {
 
 
 Matrix MatrixTool::multiplyMatrices(const Matrix& a, const Matrix& b) {
+    // I am checking multiplication compatibility before creating the result matrix.
     if (!canMultiply(a, b)) {
         throw invalid_argument("Number of columns in the first matrix must equal the number of rows in the second matrix for multiplication.");
     }
     Matrix result(a.size(), vector<double>(b[0].size(), 0.0));
+    // I am finding each result element by multiplying a row by a column and adding the products.
     for (size_t i = 0; i < a.size(); ++i) {
         for (size_t j = 0; j < b[0].size(); ++j) {
             for (size_t k = 0; k < a[0].size(); ++k) {
@@ -65,6 +73,7 @@ Matrix MatrixTool::multiplyMatrices(const Matrix& a, const Matrix& b) {
 
 
 Matrix MatrixTool::transpose(const Matrix& matrix) {
+    // I am exchanging row and column positions, assuming that all input rows have equal lengths.
     if (matrix.empty()) return {};
     Matrix result(matrix[0].size(), vector<double>(matrix.size()));
     for (size_t i = 0; i < matrix.size(); ++i) {
@@ -76,14 +85,17 @@ Matrix MatrixTool::transpose(const Matrix& matrix) {
 }
 
 double MatrixTool::determinant2x2(const Matrix& matrix) {
+    // I am checking for a 2x2 matrix and returning zero if the dimensions do not match.
     if (matrix.size() != 2 || matrix[0].size() != 2 || matrix[1].size() != 2) {
         return 0;
     }
 
+    // I am subtracting the off-diagonal product from the main-diagonal product.
     return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
 }
 
 double MatrixTool::determinant3x3(const Matrix& matrix) {
+    // I am checking for a 3x3 matrix before expanding its determinant along the first row.
     if (matrix.size() != 3 ||
         matrix[0].size() != 3 ||
         matrix[1].size() != 3 ||
@@ -109,6 +121,7 @@ double MatrixTool::determinant3x3(const Matrix& matrix) {
 }
 
 Matrix MatrixTool::inverse2x2(const Matrix& matrix) {
+    // I am checking the dimensions and determinant, returning an empty matrix when an inverse cannot be produced.
     if (matrix.size() != 2 || matrix[0].size() != 2 || matrix[1].size() != 2) {
         return Matrix{};
     }
@@ -119,6 +132,7 @@ Matrix MatrixTool::inverse2x2(const Matrix& matrix) {
         return Matrix{};
     }
 
+    // I am swapping the diagonal entries, negating the other entries, and dividing by the determinant.
     Matrix inverse = {
         { matrix[1][1] / det, -matrix[0][1] / det },
         { -matrix[1][0] / det, matrix[0][0] / det }
@@ -128,6 +142,8 @@ Matrix MatrixTool::inverse2x2(const Matrix& matrix) {
 }
 
 Matrix MatrixTool::rowEchelonForm(const Matrix& matrix) {
+    // I am working on a copy to preserve the input while applying forward elimination.
+    // I am assuming rectangular rows and using exact zero comparisons when selecting pivots.
     if (matrix.empty()) {
         return Matrix{};
     }
@@ -141,6 +157,7 @@ Matrix MatrixTool::rowEchelonForm(const Matrix& matrix) {
     for (int col = 0; col < cols && pivotRow < rows; col++) {
         int pivot = -1;
 
+        // I am searching the remaining rows for the first nonzero entry in this column.
         for (int row = pivotRow; row < rows; row++) {
             if (result[row][col] != 0) {
                 pivot = row;
@@ -149,9 +166,11 @@ Matrix MatrixTool::rowEchelonForm(const Matrix& matrix) {
         }
 
         if (pivot == -1) {
+            // I am skipping a column when it has no available nonzero pivot.
             continue;
         }
 
+        // I am moving the selected row into place and scaling it so that its pivot becomes one.
         swap(result[pivotRow], result[pivot]);
 
         double pivotValue = result[pivotRow][col];
@@ -160,6 +179,7 @@ Matrix MatrixTool::rowEchelonForm(const Matrix& matrix) {
             result[pivotRow][j] /= pivotValue;
         }
 
+        // I am subtracting multiples of the pivot row to eliminate entries below the pivot.
         for (int row = pivotRow + 1; row < rows; row++) {
             double factor = result[row][col];
 
@@ -175,6 +195,7 @@ Matrix MatrixTool::rowEchelonForm(const Matrix& matrix) {
 }
 
 Matrix MatrixTool::inputMatrix() {
+    // I am reading the requested dimensions and then collecting the matrix values row by row.
     int rows;
     int cols;
 
@@ -197,7 +218,8 @@ Matrix MatrixTool::inputMatrix() {
 }
 
 
-void MatrixTool::MatrixMenu() {
+void MatrixTool::MatrixMenu(string& lastResult) {
+    // I am repeating the matrix menu until the user chooses to return to the main menu.
     int choice;
 
     do {
@@ -214,15 +236,20 @@ void MatrixTool::MatrixMenu() {
         cout << "Enter your choice: ";
         cin >> choice;
 
+        // I am collecting the calculation details separately from the menu prompts.
+        ostringstream report;
+
         Matrix a;
         Matrix b;
         Matrix result;
 
+        // I am collecting the matrices needed for the chosen operation and displaying its result.
         switch (choice) {
             case 1:
                 a = inputMatrix();
                 b = inputMatrix();
                 result = addMatrices(a, b);
+                report << "Matrix addition\n";
                 printMatrix(result);
                 break;
 
@@ -230,6 +257,7 @@ void MatrixTool::MatrixMenu() {
                 a = inputMatrix();
                 b = inputMatrix();
                 result = subtractMatrices(a, b);
+                report << "Matrix subtraction\n";
                 printMatrix(result);
                 break;
 
@@ -237,23 +265,27 @@ void MatrixTool::MatrixMenu() {
                 a = inputMatrix();
                 b = inputMatrix();
                 result = multiplyMatrices(a, b);
+                report << "Matrix multiplication\n";
                 printMatrix(result);
                 break;
 
             case 4:
                 a = inputMatrix();
                 result = transpose(a);
+                report << "Matrix transpose\n";
                 printMatrix(result);
                 break;
 
             case 5:
                 a = inputMatrix();
                 cout << "Determinant: " << determinant2x2(a) << "\n";
+                report << "2x2 determinant\nResult: " << determinant2x2(a) << "\n";
                 break;
 
             case 6:
                 a = inputMatrix();
                 cout << "Determinant: " << determinant3x3(a) << "\n";
+                report << "3x3 determinant\nResult: " << determinant3x3(a) << "\n";
                 break;
 
             case 7:
@@ -263,6 +295,7 @@ void MatrixTool::MatrixMenu() {
                 if (result.empty()) {
                     cout << "Matrix has no inverse.\n";
                 } else {
+                    report << "2x2 matrix inverse\n";
                     printMatrix(result);
                 }
                 break;
@@ -270,6 +303,7 @@ void MatrixTool::MatrixMenu() {
             case 8:
                 a = inputMatrix();
                 result = rowEchelonForm(a);
+                report << "Row echelon form\n";
                 printMatrix(result);
                 break;
 
@@ -280,6 +314,30 @@ void MatrixTool::MatrixMenu() {
             default:
                 cout << "Invalid choice. Please try again.\n";
                 break;
+        }
+
+        // I am saving the input matrices and computed result without including menu prompts.
+        if (!report.str().empty()) {
+            report << "Matrix A:\n";
+            for (const auto& row : a) {
+                for (double value : row) report << value << " ";
+                report << "\n";
+            }
+            if (!b.empty()) {
+                report << "Matrix B:\n";
+                for (const auto& row : b) {
+                    for (double value : row) report << value << " ";
+                    report << "\n";
+                }
+            }
+            if (!result.empty()) {
+                report << "Result matrix:\n";
+                for (const auto& row : result) {
+                    for (double value : row) report << value << " ";
+                    report << "\n";
+                }
+            }
+            lastResult = report.str();
         }
 
     } while (choice != 0);
