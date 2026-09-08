@@ -1,56 +1,64 @@
 # Advanced Math Methods C++ Toolkit
 
-## A C++ console application that demonstrates advanced mathematical for complex numbers, matrices, root approximation, sequences, numerical calculus, and report export.
+A C++ console application that demonstrates advanced mathematical for complex numbers, matrices, root approximation, sequences, numerical calculus, and report export.
+---
 
 ## Features
 
-- Complex number operations
+* Complex number operations
 
-  - Addition
-  - Subtraction
-  - Multiplication
-  - Division
-  - Modulus
-  - & more
+  * Addition
+  * Subtraction
+  * Multiplication
+  * Division
+  * Modulus
+  * & more
 
-- Matrix operations
 
-  - 2x2 determinant
-  - 3x3 determinant
-  - 2x2 inverse
-  - & more
+* Matrix operations
 
-- Root approximation
+  * 2x2 determinant
+  * 3x3 determinant
+  * 2x2 inverse
+  * & more
 
-- Sequence and series tools
+* Root approximation
 
-  - Arithmetic sequences
-  - Geometric sequences
+* Sequence and series tools
 
-- Probability tools (planned, not implemented)
+  * Arithmetic sequences
+  * Geometric sequences
 
-  - Factorials
-  - Permutations
-  - Combinations
-  - Basic probability calculations
 
-- Numerical calculus tools
+* Probability tools (planned, not implemented)
 
-  - Numerical derivative approximation
-  - Trapezium rule integration
-  - Euler approximation
+  * Factorials
+  * Permutations
+  * Combinations
+  * Basic probability calculations
 
-- Report export
+* Numerical calculus tools
 
-  - Exports the latest calculation's inputs and result to `reports/session_report.txt`
-  - Creates the `reports/` directory when needed and reports file-output errors
-  - Replaces an existing report; complete session history is not saved
+  * Numerical derivative approximation
+  * Trapezium rule integration
+  * Euler approximation
+
+* Report export
+
+  * Exports the latest calculation's inputs and result to `reports/session_report.txt`
+  * Creates the `reports/` directory when needed and reports file-output errors
+  * Replaces an existing report; complete session history is not saved
 
 ---
+
+
+
 
 ## Build Instructions
 
 Requires a C++17 compiler. The Windows build has been verified with MSYS2 UCRT64 GCC 14.2.0.
+
+
 
 ```bash
 mkdir -p build
@@ -62,21 +70,23 @@ g++ -std=c++17 -Wall -Wextra -Wpedantic src/*.cpp -o build/math_toolkit
 ## Run Instructions
 
 On Windows:
+
 ```powershell
 .\math_toolkit.exe
 ```
 
 On Linux/macOS:
+
 ```bash
 cd build
 ./math_toolkit
 ```
-
 ---
 
 ## Example Usage
 
 Main menu:
+
 ```text
 Advanced Math Methods C++ Toolkit
 
